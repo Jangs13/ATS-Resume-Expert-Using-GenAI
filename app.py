@@ -6,6 +6,7 @@ import io
 from PIL import Image
 import requests
 import google.generativeai as genai
+import fitz
 
 load_dotenv()
 
