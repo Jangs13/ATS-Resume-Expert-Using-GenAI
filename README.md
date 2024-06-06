@@ -84,7 +84,7 @@ We welcome contributions to improve this project. Please follow these steps to c
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgements
-Streamlit[https://streamlit.io/]
+Streamlit(https://streamlit.io/)
 Google Generative AI
 PyMuPDF
 Pandas
