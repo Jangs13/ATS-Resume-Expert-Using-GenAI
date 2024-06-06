@@ -6,7 +6,7 @@ Land more job interviews with our resume scanner that helps you optimize your re
 
 Our ATS Resume Expert helps job seekers improve their resumes by providing detailed analysis against job descriptions. The tool highlights the strengths and weaknesses of a resume, identifies missing keywords, and suggests areas for improvement to increase the chances of getting hired.
 
-![Banner Image](path/to/your/banner/image.png)
+![Banner](https://github.com/Jangs13/ATS-Resume-Expert-Using-GenAI/blob/master/images/banner.jpeg)
 
 ## Features
 
@@ -19,41 +19,23 @@ Our ATS Resume Expert helps job seekers improve their resumes by providing detai
 
 This project uses the following technologies:
 
-<div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python" width="60" height="60">
-  <br>Python
-</div>
+- python
+- StreamLit
+- Google Generative AI
+- PyMuPDF
+- Pandas
 
-<div align="center">
-  <img src="https://streamlit.io/images/brand/streamlit-mark-color.png" alt="Streamlit" width="60" height="60">
-  <br>Streamlit
-</div>
-
-<div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Logo_2013_Google.png/800px-Logo_2013_Google.png" alt="Google Generative AI" width="60" height="60">
-  <br>Google Generative AI
-</div>
-
-<div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Poppler_logo.png" alt="PyMuPDF" width="60" height="60">
-  <br>PyMuPDF
-</div>
-
-<div align="center">
-  <img src="https://pandas.pydata.org/static/img/pandas_mark.svg" alt="Pandas" width="60" height="60">
-  <br>Pandas
-</div>
-
-<div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Plotly-logo-01-square.png" alt="Plotly" width="60" height="60">
-  <br>Plotly
-</div>
 
 ## How It Works
 
 1. **Upload your resume and job description.**
+   ![Upload](https://github.com/Jangs13/ATS-Resume-Expert-Using-GenAI/blob/master/images/atspdfupload.png)
+   
 2. **Get a detailed analysis** of your resume's match with the job description.
+   ![analysis](https://github.com/Jangs13/ATS-Resume-Expert-Using-GenAI/blob/master/images/atsresp.png)
+
 3. **Identify missing keywords** and areas for improvement.
+  ![analysis2](https://github.com/Jangs13/ATS-Resume-Expert-Using-GenAI/blob/master/images/atsresp2.png)
 
 ## Setup and Installation
 
