@@ -3,20 +3,20 @@ import base64
 import streamlit as st
 import os
 import io
+import fitz  # PyMuPDF
 from PIL import Image
-import requests
 import google.generativeai as genai
-import fitz
 
+# Load environment variables
 load_dotenv()
 
+# Configure Google Generative AI
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def get_gemini_response(input_text, pdf_content, prompt):
     model = genai.GenerativeModel('gemini-pro-vision')
     response = model.generate_content([input_text, pdf_content[0], prompt])
     return response.text
-
 
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
@@ -38,9 +38,24 @@ def input_pdf_setup(uploaded_file):
     else:
         raise FileNotFoundError("No file uploaded")
 
+def extract_skills_from_response(response):
+    # Implement logic to extract skills from the AI response
+    skills = []
+    for line in response.splitlines():
+        if "Skills:" in line:
+            skills.extend(line.replace("Skills:", "").strip().split(","))
+    return [skill.strip() for skill in skills]
+
+def extract_skills_from_job_description(job_description):
+    # Implement logic to extract skills from the job description
+    keywords = ["SQL", "Python", "R", "Java", "C++", "AWS", "Azure", "Tableau", "Power BI", "Git", "Jira", "Scrum", "Agile", "DataOps", "MLOps", "CI/CD"]
+    skills = []
+    for keyword in keywords:
+        if keyword.lower() in job_description.lower():
+            skills.append(keyword)
+    return skills
 
 ## Streamlit App
-
 st.set_page_config(page_title="ATS Resume Expert", layout="wide")
 
 # CSS for glowing buttons and icons
@@ -190,17 +205,18 @@ elif st.session_state.page == 'scanner':
     You are an experienced Technical Human Resource Manager. Your task is to review the provided resume against the job description.
     Please share your professional evaluation on whether the candidate's profile aligns with the role.
     Highlight the strengths and weaknesses of the applicant in relation to the specified job requirements.
+    Extract the skills, experiences, and technologies mentioned in the resume.
     """
 
     input_prompt3 = """
-    You are a skilled ATS (Applicant Tracking System) scanner with a deep understanding of Data Science, Full Stack Web Development, Big Data Engineering, DevOps, Data Analyst and deep ATS functionality. Your task is to evaluate the resume against the provided job description.
+    You are a skilled ATS (Applicant Tracking System) scanner with a deep understanding of Data Science, Full Stack Web Development, Big Data Engineering, DevOps, Data Analysis and deep ATS functionality. Your task is to evaluate the resume against the provided job description.
 
     Please provide the following:
     1. The percentage match between the resume and the job description.
     2. Keywords missing from the resume.
     3. Final thoughts on the overall fit of the candidate for the job.
 
-    Start with the percentage match, followed by the missing keywords, and conclude with your final thoughts.
+    Extract the skills, experiences, and technologies mentioned in the resume and job description.
     """
 
     response = ""
@@ -220,11 +236,16 @@ elif st.session_state.page == 'scanner':
             response = get_gemini_response(input_text, pdf_content, input_prompt3)
             st.subheader("The Response is")
             st.write(response)
-            keywords = ["SQL", "Python", "R", "Java", "C++", "AWS", "Azure", "Tableau", "Power BI", "Git", "Jira", "Scrum", "Agile", "DataOps", "MLOps", "CI/CD"]
-            found_keywords = [kw for kw in keywords if kw.lower() in response.lower()]
-            missing_keywords = list(set(keywords) - set(found_keywords))
+            
+            # Extract skills from response and job description
+            skills_in_resume = extract_skills_from_response(response)
+            skills_in_job_desc = extract_skills_from_job_description(input_text)
+            
+            # Compare skills
+            found_keywords = set(skills_in_resume) & set(skills_in_job_desc)
+            missing_keywords = set(skills_in_job_desc) - set(skills_in_resume)
+            
             st.write("The following keywords are missing from the resume:")
             st.write(missing_keywords)
         else:
             st.error("Please upload the resume")
-
