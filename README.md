@@ -84,18 +84,15 @@ We welcome contributions to improve this project. Please follow these steps to c
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgements
-Streamlit(https://streamlit.io/)
-Google Generative AI
-PyMuPDF
-Pandas
+- Streamlit
+- Google Generative AI
+- PyMuPDF
+- Pandas
 
 
 ## Contact
 If you have any questions, feel free to reach out:
 
-Name: Atharv Pramod Jangam
-Email: atharvjangam30@gmail.com
-LinkedIn: Atharv Pramod Jangam
-GitHub: Jangs13
-Portfolio: Atharv Jangam
-   
+- Name: Atharv Pramod Jangam
+- Email: atharvjangam30@gmail.com
+
