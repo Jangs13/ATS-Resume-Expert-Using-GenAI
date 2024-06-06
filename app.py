@@ -4,7 +4,7 @@ import streamlit as st
 import os
 import io
 from PIL import Image
-import pdf2image
+import requests
 import google.generativeai as genai
 
 load_dotenv()
@@ -16,22 +16,41 @@ def get_gemini_response(input_text, pdf_content, prompt):
     response = model.generate_content([input_text, pdf_content[0], prompt])
     return response.text
 
+
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
-        images = pdf2image.convert_from_bytes(uploaded_file.read())
-        first_page = images[0]
-        img_byte_arr = io.BytesIO()
-        first_page.save(img_byte_arr, format='JPEG')
-        img_byte_arr = img_byte_arr.getvalue()
-        pdf_parts = [
-            {
-                "mime_type": "image/jpeg",
-                "data": base64.b64encode(img_byte_arr).decode()
-            }
-        ]
-        return pdf_parts
+        # Save the uploaded PDF to a file
+        with open("uploaded.pdf", "wb") as f:
+            f.write(uploaded_file.getbuffer())
+
+        # Upload the PDF to an online service for conversion
+        with open("uploaded.pdf", "rb") as f:
+            response = requests.post(
+                "https://api.pdf2jpg.net/v1/api/convert",
+                files={"file": f}
+            )
+
+        if response.status_code == 200:
+            data = response.json()
+            if data["success"]:
+                # Download the first image from the response
+                image_url = data["images"][0]
+                image_response = requests.get(image_url)
+                img_byte_arr = io.BytesIO(image_response.content)
+                pdf_parts = [
+                    {
+                        "mime_type": "image/jpeg",
+                        "data": base64.b64encode(img_byte_arr.getvalue()).decode()
+                    }
+                ]
+                return pdf_parts
+            else:
+                raise Exception("Failed to convert PDF to image: " + data["error"])
+        else:
+            raise Exception("Failed to upload PDF for conversion")
     else:
         raise FileNotFoundError("No file uploaded")
+
 
 ## Streamlit App
 
