@@ -15,6 +15,9 @@ Our ATS Resume Expert helps job seekers improve their resumes by providing detai
 - **Interactive Visualizations**: Visualize the analysis results with interactive charts.
 - **Downloadable Report**: Download a comprehensive evaluation report of your resume.
 
+## Live Project Demo
+https://ats-resume-expert-using-genai-agssmatmexm6hywaohk22a.streamlit.app/
+
 ## Technology Stack
 
 This project uses the following technologies:
