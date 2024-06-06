@@ -19,35 +19,21 @@ def get_gemini_response(input_text, pdf_content, prompt):
 
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
-        # Save the uploaded PDF to a file
-        with open("uploaded.pdf", "wb") as f:
-            f.write(uploaded_file.getbuffer())
-
-        # Upload the PDF to an online service for conversion
-        with open("uploaded.pdf", "rb") as f:
-            response = requests.post(
-                "https://api.pdf2jpg.net/v1/api/convert",
-                files={"file": f}
-            )
-
-        if response.status_code == 200:
-            data = response.json()
-            if data["success"]:
-                # Download the first image from the response
-                image_url = data["images"][0]
-                image_response = requests.get(image_url)
-                img_byte_arr = io.BytesIO(image_response.content)
-                pdf_parts = [
-                    {
-                        "mime_type": "image/jpeg",
-                        "data": base64.b64encode(img_byte_arr.getvalue()).decode()
-                    }
-                ]
-                return pdf_parts
-            else:
-                raise Exception("Failed to convert PDF to image: " + data["error"])
-        else:
-            raise Exception("Failed to upload PDF for conversion")
+        # Read the PDF file
+        pdf_document = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+        # Get the first page
+        page = pdf_document.load_page(0)
+        # Convert the page to a pixmap (image)
+        pix = page.get_pixmap()
+        # Save the image to a bytes buffer
+        img_byte_arr = io.BytesIO(pix.tobytes(output="png"))
+        pdf_parts = [
+            {
+                "mime_type": "image/png",
+                "data": base64.b64encode(img_byte_arr.getvalue()).decode()
+            }
+        ]
+        return pdf_parts
     else:
         raise FileNotFoundError("No file uploaded")
 
